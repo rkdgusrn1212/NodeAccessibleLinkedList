@@ -6,7 +6,7 @@
  * 3. 입력 노드의 다음노드를 반환.
  * 4. 기타 필요없는 기능 뺌.
  */
-public class NodeAccessibleLinkedList<E>{
+class NodeAccessibleLinkedList<E>{
 	
 	private Node<E> first = null;
 	private Node<E> last = null;
@@ -107,6 +107,9 @@ public class NodeAccessibleLinkedList<E>{
 	public E getElem(Node<E> node) {
 		return node.elem;
 	}
+	public void setElem(Node<E> node, E elem) {
+		node.elem = elem;
+	}
 	
 	public Node<E> getFirst() {
 		return first;
@@ -134,14 +137,20 @@ public class NodeAccessibleLinkedList<E>{
 	}
 	
 	public void attachList(NodeAccessibleLinkedList<E> list) {
-		if(first==null){
-			first = list.first;
-		}else {
-			last.next = list.first;
-			list.first.prev = last;
+		if(list.first==null) {
+			return;
 		}
+		//list는 비어있지 않음.
+		if(first==null) {
+			first = list.first;
+			last = list.last;
+		}
+		//둘다 비어있지 않음.
+		last.next = list.first;
+		list.first.prev = last;
 		last = list.last;
-		list.first = null;
 		list.last = null;
+		list.first = null;
+
 	}
 }
