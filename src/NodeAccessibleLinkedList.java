@@ -1,3 +1,5 @@
+import NodeAccessibleLinkedList.Node;
+
 /**  
  * @author khgkjg12
  * LinkedList와의 차이점
@@ -6,13 +8,14 @@
  * 3. 입력 노드의 다음노드를 반환.
  * 4. 기타 필요없는 기능 뺌.
  */
-public class NodeAccessibleLinkedList<E>{
+class NodeAccessibleLinkedList<E>{
 	
 	private Node<E> first = null;
 	private Node<E> last = null;
 	
 	@SuppressWarnings("hiding")
-	public static class Node<E>{//static으로 외부참조없에고 외부클래스가 먼제 unreachable될 경우의 메모리 누수 방지.
+	public static class Node<E>{
+		//static으로 외부참조없에고 외부클래스가 먼제 unreachable될 경우의 메모리 누수 방지.
 		private E elem;
 		private Node<E> prev = null;
 		private Node<E> next = null;
@@ -74,7 +77,7 @@ public class NodeAccessibleLinkedList<E>{
 		node.next = next;
 	}
 	
-	
+
 	//Node를 리스트에서 제거
 	public void removeNode(Node<E> node) {
 		Node<E> pNode = node.prev;
@@ -107,6 +110,9 @@ public class NodeAccessibleLinkedList<E>{
 	public E getElem(Node<E> node) {
 		return node.elem;
 	}
+	public void setElem(Node<E> node, E elem) {
+		node.elem = elem;
+	}
 	
 	public Node<E> getFirst() {
 		return first;
@@ -126,7 +132,7 @@ public class NodeAccessibleLinkedList<E>{
 			pNode.next = null;
 			strNode.prev = null;
 			last = pNode;
-		}else {//텅비어버림.
+		}else {//텅비어버림. srtNode가 first인경우.
 			first = null;
 			last = null;
 		}
@@ -134,14 +140,20 @@ public class NodeAccessibleLinkedList<E>{
 	}
 	
 	public void attachList(NodeAccessibleLinkedList<E> list) {
-		if(first==null){
-			first = list.first;
-		}else {
-			last.next = list.first;
-			list.first.prev = last;
+		if(list.first==null) {
+			return;
 		}
+		//list는 비어있지 않음.
+		if(first==null) {
+			first = list.first;
+			last = list.last;
+			return;
+		}
+		//둘다 비어있지 않음.
+		last.next = list.first;
+		list.first.prev = last;
 		last = list.last;
-		list.first = null;
 		list.last = null;
+		list.first = null;
 	}
 }
